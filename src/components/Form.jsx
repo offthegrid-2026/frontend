@@ -6,19 +6,100 @@ export default function Form() {
     const [state, setState] = useState("create");
 
     const [email, setEmail] = useState("");
+
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [college, setCollege] = useState("");
     const [city, setCity] = useState("");
-    const [userState, setUserState] = useState("");
+
+
+    const [emailError, setEmailError] = useState("");
+    const validateEmail = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email.trim()) {
+            setEmailError("Email is required");
+            return false;
+        }
+
+        if (!emailRegex.test(email)) {
+            setEmailError("Please enter a valid email address");
+            return false;
+        }
+
+        setEmailError("");
+        return true;
+    };
+
+    const [phoneError, setPhoneError] = useState("");
+    const validatePhone = () => {
+        const phoneRegex = /^[6-9]\d{9}$/;
+
+        if (!phone.trim()) {
+            setPhoneError("Phone number is required");
+            return false;
+        }
+
+        if (!phoneRegex.test(phone)) {
+            setPhoneError("Please enter a valid 10-digit phone number");
+            return false;
+        }
+
+        setPhoneError("");
+        return true;
+    };
+
+    const [otpError, setOtpError] = useState("");
+    const validateOTP = () => {
+
+        const enteredOTP = otp.join("");
+
+        if (enteredOTP.length !== 6) {
+            setOtpError("Please enter the complete 6-digit OTP.");
+            return false;
+        }
+
+        setOtpError("");
+        return true;
+    };
+
+    const [createError, setCreateError] = useState("");
+    const validateCreateForm = () => {
+
+        if (
+            !firstName.trim() ||
+            !lastName.trim() ||
+            !phone.trim() ||
+            !college.trim() ||
+            !city.trim()
+        ) {
+            setCreateError("All fields marked * are required.");
+            return false;
+        }
+
+        if (!validatePhone()) {
+            return false;
+        }
+
+        setCreateError("");
+
+        return true;
+    };
 
 
     return (
         <>
+
             <form
                 className="flex flex-col gap-5 bg-[#F8FFF4] h-full p-8"
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                    }
+                }}
             >
                 {/*Header*/}
                 <img
@@ -43,14 +124,31 @@ export default function Form() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full h-12 px-4 border border-black bg-transparent poppins-light text-md placeholder:text-gray-500 outline-none"
                             />
+                            {emailError && (
+                                <p className="-mt-3 text-[12px] text-red-500 poppins-regular">
+                                    {emailError}
+                                </p>
+                            )}
                             <button
                                 type="button"
+                                onClick={() => {
+                                    if (!validateEmail()) return;
+
+                                    // Send OTP API
+                                }}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+
+                                    if (emailError) {
+                                        setEmailError("");
+                                    }
+                                }}
                                 className="w-full h-12 bg-black text-white poppins-regular text-lg cursor-pointer
                                 hover:scale-99 active:scale-100 transition-all ease-in-out duration-200"
                             >
                                 Send OTP
                             </button>
-                            <p className="-mt-3 text-center poppins-light-italic text-sm text-gray-500 cursor-pointer
+                            <p className="-mt-2 text-center poppins-light-italic text-sm text-gray-500 cursor-pointer
                             underline underline-offset-1 decoration-transparent hover:decoration-gray-500 transition-all duration-300">
                                 Facing problems? Contact Us
                             </p>
@@ -72,9 +170,14 @@ export default function Form() {
                                         value={digit}
                                         onChange={(e) => {
                                             const value = e.target.value.replace(/\D/g, "");
+
                                             const updatedOtp = [...otp];
                                             updatedOtp[index] = value;
                                             setOtp(updatedOtp);
+
+                                            if (otpError) {
+                                                setOtpError("");
+                                            }
 
                                             if (value && index < 5) {
                                                 document.getElementById(`otp-${index + 1}`)?.focus();
@@ -94,9 +197,21 @@ export default function Form() {
                                     />
                                 ))}
                             </div>
-
+                            {otpError && (
+                                <p className="-mt-3 text-[12px] text-red-500 poppins-regular">
+                                    {otpError}
+                                </p>
+                            )}
                             <button
                                 type="button"
+                                onClick={() => {
+
+                                    if (!validateOTP()) return;
+
+                                    // Verify OTP API
+
+                                }}
+
                                 className="w-full h-12 bg-black text-white poppins-regular text-lg cursor-pointer
                                 hover:scale-99 active:scale-100 transition-all ease-in-out duration-200"
                             >
@@ -104,7 +219,7 @@ export default function Form() {
                             </button>
 
                             <p
-                                className="-mt-3 text-center poppins-light-italic text-sm text-gray-500 cursor-pointer
+                                className="-mt-2 text-center poppins-light-italic text-sm text-gray-500 cursor-pointer
                                 underline underline-offset-1 decoration-transparent hover:decoration-gray-500 transition-all duration-300"
                             >
                                 Facing problems? Contact Us
@@ -121,17 +236,29 @@ export default function Form() {
                             <div className="flex gap-2">
                                 <input
                                     type="text"
-                                    placeholder="First Name"
+                                    placeholder="First Name*"
                                     value={firstName}
-                                    onChange={(e) => setFirstName(e.target.value)}
+                                    onChange={(e) => {
+                                        setFirstName(e.target.value);
+
+                                        if (createError) {
+                                            setCreateError("");
+                                        }
+                                    }}
                                     className="flex-1 min-w-0 h-12 w-60 px-4 border border-black bg-transparent poppins-light text-md placeholder:text-gray-500 outline-none"
                                 />
 
                                 <input
                                     type="text"
-                                    placeholder="Last Name"
+                                    placeholder="Last Name*"
                                     value={lastName}
-                                    onChange={(e) => setLastName(e.target.value)}
+                                    onChange={(e) => {
+                                        setLastName(e.target.value);
+
+                                        if (createError) {
+                                            setCreateError("");
+                                        }
+                                    }}
                                     className="flex-1 min-w-0 h-12 w-60 px-4 border border-black bg-transparent poppins-light text-md placeholder:text-gray-500 outline-none"
                                 />
                             </div>
@@ -146,43 +273,78 @@ export default function Form() {
 
                                 <input
                                     type="tel"
-                                    placeholder="Phone Number"
+                                    placeholder="Phone Number*"
                                     value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/\D/g, "");
+
+                                        if (value.length <= 10) {
+                                            setPhone(value);
+                                        }
+
+                                        if (phoneError) {
+                                            setPhoneError("");
+                                        }
+
+                                        if (createError) {
+                                            setCreateError("");
+                                        }
+                                    }}
                                     className="flex-1 h-12 px-4 border border-black bg-transparent poppins-light text-md placeholder:text-gray-500 outline-none"
                                 />
                             </div>
+                            {phoneError && (
+                                <p className="-mt-3 text-[12px] text-red-500 poppins-regular">
+                                    {phoneError}
+                                </p>
+                            )}
 
                             <input
                                 type="text"
-                                placeholder="College/Organization"
+                                placeholder="College/Organization*"
                                 value={college}
-                                onChange={(e) => setCollege(e.target.value)}
+                                onChange={(e) => {
+                                    setCollege(e.target.value);
+
+                                    if (createError) {
+                                        setCreateError("");
+                                    }
+                                }}
                                 className="w-full h-12 px-4 border border-black bg-transparent poppins-light text-md placeholder:text-gray-500 outline-none"
                             />
 
                             <div className="flex gap-2">
                                 <input
                                     type="text"
-                                    placeholder="City"
+                                    placeholder="City with State*"
                                     value={city}
-                                    onChange={(e) => setCity(e.target.value)}
+                                    onChange={(e) => {
+                                        setCity(e.target.value);
+
+                                        if (createError) {
+                                            setCreateError("");
+                                        }
+                                    }}
                                     className="flex-1 min-w-0 h-12 px-4 border border-black bg-transparent poppins-light text-md placeholder:text-gray-500 outline-none"
                                 />
 
-                                <input
-                                    type="text"
-                                    placeholder="State"
-                                    value={userState}
-                                    onChange={(e) => setUserState(e.target.value)}
-                                    className="flex-1 min-w-0 h-12 px-4 border border-black bg-transparent poppins-light text-md placeholder:text-gray-500 outline-none"
-                                />
                             </div>
-
+                            {createError && (
+                                <p className="-mt-3 text-[12px] text-red-500 poppins-regular">
+                                    {createError}
+                                </p>
+                            )}
                             <button
                                 type="button"
+                                onClick={() => {
+
+                                    if (!validateCreateForm()) return;
+
+                                    // API
+
+                                }}
                                 className="w-full h-12 bg-black text-white poppins-regular text-lg cursor-pointer
-            hover:scale-99 active:scale-100 transition-all ease-in-out duration-200"
+                                hover:scale-99 active:scale-100 transition-all ease-in-out duration-200"
                             >
                                 Create Account
                             </button>
