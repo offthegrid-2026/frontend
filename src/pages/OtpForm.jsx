@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Navigate, useNavigate, useOutletContext } from "react-router-dom";
 import { verifyOtp } from "../api/authApi";
 import { saveToken } from "../lib/token";
+import EyeSpinner from "../components/EyeSpinner";
 
 export default function OtpForm() {
     const navigate = useNavigate();
@@ -94,9 +95,10 @@ export default function OtpForm() {
                 }}
                 className="w-full h-12 bg-black text-white poppins-regular text-lg cursor-pointer
                 disabled:opacity-50 disabled:cursor-not-allowed
-                hover:scale-99 active:scale-100 transition-all ease-in-out duration-200"
+                hover:scale-99 active:scale-100 transition-all ease-in-out duration-200
+                flex items-center justify-center"
             >
-                {verifying ? "Verifying..." : "Submit OTP"}
+                {verifying ? <EyeSpinner size={32} color="#F0F0F0" glintColor="#555555" /> : "Submit OTP"}
             </button>
 
             <p

@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../api/usersApi";
 import { getToken } from "../lib/token";
 import { isProfileComplete } from "../lib/isProfileComplete";
+import LoadingScreen from "../components/LoadingScreen";
 
 // Sits inside RequireAuth. Fetches the current user once, and only renders the nested
 // route if their profile is actually complete — otherwise sends them to finish it.
@@ -53,11 +54,7 @@ export default function RequireCompleteProfile() {
     }, [navigate]);
 
     if (status === "loading") {
-        return (
-            <section className="h-screen w-screen bg-[#F8FFF4] flex items-center justify-center">
-                <p className="poppins-medium text-gray-500 text-xl">Loading...</p>
-            </section>
-        );
+        return <LoadingScreen />;
     }
 
     if (status === "error") {
