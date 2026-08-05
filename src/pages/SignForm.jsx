@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { requestOtp } from "../api/authApi";
+import EyeSpinner from "../components/EyeSpinner";
 
 export default function SignForm() {
     const navigate = useNavigate();
@@ -67,9 +68,10 @@ export default function SignForm() {
                 }}
                 className="w-full h-12 bg-black text-white poppins-regular text-lg cursor-pointer
                 disabled:opacity-50 disabled:cursor-not-allowed
-                hover:scale-99 active:scale-100 transition-all ease-in-out duration-200"
+                hover:scale-99 active:scale-100 transition-all ease-in-out duration-200
+                flex items-center justify-center"
             >
-                {sending ? "Sending..." : "Send OTP"}
+                {sending ? <EyeSpinner size={32} color="#F0F0F0" glintColor="#555555" /> : "Send OTP"}
             </button>
             <p className="-mt-2 text-center poppins-light-italic text-sm text-gray-500 cursor-pointer
             underline underline-offset-1 decoration-transparent hover:decoration-gray-500 transition-all duration-300">

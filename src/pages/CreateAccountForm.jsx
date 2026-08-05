@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateProfile } from "../api/usersApi";
+import EyeSpinner from "../components/EyeSpinner";
 
 export default function CreateAccountForm() {
     const navigate = useNavigate();
@@ -185,9 +186,10 @@ export default function CreateAccountForm() {
                 }}
                 className="w-full h-12 bg-black text-white poppins-regular text-lg cursor-pointer
                 disabled:opacity-50 disabled:cursor-not-allowed
-                hover:scale-99 active:scale-100 transition-all ease-in-out duration-200"
+                hover:scale-99 active:scale-100 transition-all ease-in-out duration-200
+                flex items-center justify-center"
             >
-                {submitting ? "Creating..." : "Create Account"}
+                {submitting ? <EyeSpinner size={32} color="#F0F0F0" glintColor="#555555" /> : "Create Account"}
             </button>
         </>
     );
