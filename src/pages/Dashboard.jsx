@@ -1,9 +1,28 @@
-import { useOutletContext } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import DashboardField from "../components/DashboardField";
 import FloatingMenu from "../components/FloatingMenu.jsx";
+import EyeSpinner from "../components/EyeSpinner";
+import { downloadTicketPdf } from "../api/ticketsApi";
 
 export default function Dashboard() {
     const { user } = useOutletContext();
+    const navigate = useNavigate();
+
+    const [fetchingPass, setFetchingPass] = useState(false);
+    const [passError, setPassError] = useState("");
+
+    async function handleGetPass() {
+        setFetchingPass(true);
+        setPassError("");
+        try {
+            await downloadTicketPdf();
+        } catch (err) {
+            setPassError(err.message);
+        } finally {
+            setFetchingPass(false);
+        }
+    }
 
     return (
         <>
@@ -94,10 +113,28 @@ export default function Dashboard() {
                                 {user.paymentStatus ? (
                                     // TODO: swap in the real Event Pass card design once it's ready.
                                     // Structure is ready to branch on user.paymentStatus — no rewiring needed later.
-                                    <div className="h-40 flex items-center justify-center">
+                                    <div className="h-40 flex flex-col items-center justify-center gap-3">
                                         <p className="poppins-medium text-gray-500 text-xl">
-                                            Pass design coming soon.
+                                            Here is your pass
                                         </p>
+
+                                        <button
+                                            disabled={fetchingPass}
+                                            onClick={handleGetPass}
+                                            className="bg-[#FF5634] text-white tektur font-semibold text-2xl px-6 py-2 cursor-pointer
+                                            disabled:opacity-50 disabled:cursor-not-allowed
+                                            hover:scale-102 active:scale-98
+                                            transition-all ease-in-out duration-200
+                                            flex items-center justify-center"
+                                        >
+                                            {fetchingPass ? <EyeSpinner size={32} color="#F0F0F0" glintColor="#555555" /> : "Get Pass"}
+                                        </button>
+
+                                        {passError && (
+                                            <p className="text-[12px] text-red-500 poppins-regular">
+                                                {passError}
+                                            </p>
+                                        )}
                                     </div>
                                 ) : (
                                     <div
@@ -108,7 +145,7 @@ export default function Dashboard() {
                                         </p>
 
                                         <button
-                                            // TODO: navigate to the store page once it's built
+                                            onClick={() => navigate("/store")}
                                             className="bg-[#FF5634] text-white tektur font-semibold text-2xl px-6 py-2 cursor-pointer
                                             hover:scale-102 active:scale-98
                                             transition-all ease-in-out duration-200"

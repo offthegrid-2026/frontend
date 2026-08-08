@@ -3,11 +3,12 @@ import { Routes, Route } from 'react-router-dom'
 import AuthLayout from './layouts/AuthLayout'
 import RequireAuth from './routes/RequireAuth'
 import RequireCompleteProfile from './routes/RequireCompleteProfile'
+import RequireNoPass from './routes/RequireNoPass'
 import SignForm from './pages/SignForm'
 import OtpForm from './pages/OtpForm'
 import CreateAccountForm from './pages/CreateAccountForm'
 import Dashboard from './pages/Dashboard'
-import StorePage from "./pages/StorePage.jsx";
+import StorePage from './pages/StorePage.jsx'
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
       <Route element={<RequireAuth />}>
         <Route element={<RequireCompleteProfile />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route element={<RequireNoPass />}>
+            <Route path="/store" element={<StorePage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

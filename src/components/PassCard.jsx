@@ -1,9 +1,23 @@
+import EyeSpinner from "./EyeSpinner";
+
 export default function PassCard({
-                                     name,
-                                     color,
-                                     soldOut = false,
-                                     onBuy
-                                 }) {
+    name,
+    color,
+    priceRupees,
+    status = "ON_SALE", // "ON_SALE" | "SOLD_OUT" | "COMING_SOON" — matches the backend's TicketTypeStatus enum
+    loading = false,
+    onBuy
+}) {
+    const soldOut = status === "SOLD_OUT";
+    const comingSoon = status === "COMING_SOON";
+    const disabled = soldOut || comingSoon || loading;
+
+    const buttonLabel = soldOut
+        ? "SOLD OUT"
+        : comingSoon
+            ? "Coming Soon"
+            : "Buy Now";
+
     return (
         <div
             className="
@@ -41,6 +55,28 @@ export default function PassCard({
                 </div>
             )}
 
+            {comingSoon && (
+                <div
+                    className="
+                        absolute
+                        top-12
+                        -right-17.5
+                        w-70
+                        py-3
+                        bg-[#B5FF61]
+                        text-black
+                        text-3xl
+                        font-bold
+                        uppercase
+                        text-center
+                        rotate-45
+                        z-10
+                    "
+                >
+                    Coming Soon
+                </div>
+            )}
+
             <h2
                 className="
                     font-perandory
@@ -53,11 +89,17 @@ export default function PassCard({
                 {name}
             </h2>
 
+            {priceRupees != null && (
+                <p className="poppins-semibold text-white text-3xl mt-3">
+                    ₹{Math.round(Number(priceRupees)).toLocaleString("en-IN")}
+                </p>
+            )}
+
             <button
                 type="button"
-                disabled={soldOut}
+                disabled={disabled}
                 onClick={() => {
-                    if (!soldOut) {
+                    if (!disabled) {
                         onBuy();
                     }
                 }}
@@ -70,15 +112,21 @@ export default function PassCard({
                     poppins-semibold
                     transition-all
                     duration-200
+                    flex
+                    items-center
+                    justify-center
 
-                    ${
-                    soldOut
+                    ${soldOut
                         ? "text-red-600 cursor-not-allowed"
-                        : "text-black cursor-pointer hover:scale-[0.99] active:scale-[0.97]"
-                }
+                        : comingSoon
+                            ? "text-gray-500 cursor-not-allowed"
+                            : loading
+                                ? "text-black cursor-wait opacity-70"
+                                : "text-black cursor-pointer hover:scale-[0.99] active:scale-[0.97]"
+                    }
                 `}
             >
-                {soldOut ? "SOLD OUT" : "Buy Now"}
+                {loading ? <EyeSpinner size={28} color="#111111" glintColor="#ffffff" /> : buttonLabel}
             </button>
 
         </div>
