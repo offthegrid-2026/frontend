@@ -7,6 +7,7 @@ import SignForm from './pages/SignForm'
 import OtpForm from './pages/OtpForm'
 import CreateAccountForm from './pages/CreateAccountForm'
 import Dashboard from './pages/Dashboard'
+import StorePage from "./pages/StorePage.jsx";
 
 function App() {
   return (
