@@ -86,7 +86,11 @@ export default function OtpForm() {
                     try {
                         const data = await verifyOtp(email.trim().toLowerCase(), otp.join(""));
                         saveToken(data.token);
-                        navigate(data.profileCompleted ? "/dashboard" : "/create-account");
+                        if (data.scanner) {
+                            navigate("/scanner");
+                        } else {
+                            navigate(data.profileCompleted ? "/dashboard" : "/create-account");
+                        }
                     } catch (err) {
                         setOtpError(err.message);
                     } finally {

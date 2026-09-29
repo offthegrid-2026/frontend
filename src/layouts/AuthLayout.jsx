@@ -6,7 +6,7 @@ export default function AuthLayout() {
 
     return (
         <section className="h-screen w-screen bg-black">
-            <img src="/public/images/bg-pattern.svg" alt="" className="fixed left-70 z-1 rotate-90 scale-250 opacity-2"/>
+            <img src="/images/bg-pattern.svg" alt="" className="fixed left-70 z-1 rotate-90 scale-250 opacity-2"/>
             <div className="flex gap-20 justify-center items-stretch h-full w-full px-20 py-30">
 
                 {/*Permanent*/}
@@ -18,7 +18,7 @@ export default function AuthLayout() {
                         Don't miss out
                     </h1>
                     <img
-                        src="/public/images/OTG-white.svg"
+                        src="/images/OTG-white.svg"
                         alt=""
                         className="w-100 h-auto"
                     />
@@ -50,7 +50,7 @@ export default function AuthLayout() {
                         }}
                     >
                         <img
-                            src="/public/images/eyeform.svg"
+                            src="/images/eyeform.svg"
                             alt=""
                             width="200px"
                         />

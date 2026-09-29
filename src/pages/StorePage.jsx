@@ -43,9 +43,9 @@ export function StoreNav() {
             <div
                 className="flex items-center gap-2"
             >
-                <img src="/public/images/OTG Purple.svg" alt="" width="90px"/>
+                <img src="/images/OTG Purple.svg" alt="" width="90px"/>
                 <div className="h-14 w-px bg-gray-300 mx-4" />
-                <img src="/public/images/bees-black.svg" alt="" width="120px"/>
+                <img src="/images/bees-black.svg" alt="" width="120px"/>
             </div>
             {/* Page title */}
             <h1 className="mt-5 font-perandory text-7xl uppercase text-black">

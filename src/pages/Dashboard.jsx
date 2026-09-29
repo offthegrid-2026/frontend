@@ -162,7 +162,7 @@ export default function Dashboard() {
                     <div id="Image" className="lg:flex hidden">
 
                         <img
-                            src="/public/images/dash-image.png"
+                            src="/images/dash-image.png"
                             alt=""
                             draggable="false"
                             className="w-150 opacity-90 "
