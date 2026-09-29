@@ -1,0 +1,12 @@
+# .env.development would point the build at localhost:8081 - production must use the
+# same-origin /api proxy instead, so no .env file may reach the build.
+.env
+.env.*
+
+node_modules/
+dist/
+dist-ssr/
+.git/
+.agents/
+.vscode/
+.idea/
